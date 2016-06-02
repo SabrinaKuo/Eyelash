@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">Eyelash</string>
+
+    <string name="action_add">Add</string>
+    <string name="dateTitle">Date</string>
+    <string name="eyeTitle">Eyes Type</string>
+    <string name="styleTitle">Style</string>
+    <string name="photoTitle">Photo</string>
+
+    <string-array name="eyes_type">
+        <item>外雙眼皮</item>
+        <item>內雙眼皮</item>
+        <item>單眼皮</item>
+        <item>丹鳳眼</item>
+        <item>泡泡眼</item>
+        <item>凹眼</item>
+    </string-array>
+
+    <string-array name="lash_style">
+        <item>蛋白纖維毛</item>
+        <item>水貂毛</item>
+        <item>兔毛</item>
+    </string-array>
+
+    <string-array name="curl">
+        <item>J</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+    </string-array>
+
+    <string-array name="thick">
+        <item>0.7</item>
+        <item>0.9</item>
+        <item>1.0</item>
+        <item>1.5</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
