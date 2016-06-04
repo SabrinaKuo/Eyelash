@@ -10,9 +10,10 @@
     android:background="@color/background"
     tools:context=".activity.MainActivity">
 
-    <FrameLayout
+    <LinearLayout
         android:id = "@+id/mainActivityContent"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    </LinearLayout>
 </RelativeLayout>

@@ -68,12 +68,14 @@
                     />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/dateWheel"
+            <DatePicker
+                android:id="@+id/datePicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center"
+                android:datePickerMode="spinner"
+                android:yearListItemTextAppearance="@android:style/TextAppearance.StatusBar.Title"
                 android:paddingBottom="@dimen/new_custom_item_padding_top_bottom"
                 android:paddingTop="@dimen/new_custom_item_padding_top_bottom"
                 android:visibility="gone" />

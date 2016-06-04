@@ -2,6 +2,8 @@ package com.nanadeer.eyelash.fragment;
 
 
 import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +12,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,6 +23,7 @@ import com.nanadeer.eyelash.parameter.EyelashParameter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,6 +32,8 @@ public class NewCustomFragment extends Fragment {
 
     private WheelView wvYear, wvMonth, wvDay, wvEyesType, wvStyle;
     private LinearLayout llDateWheel, llEyesTypeWheel, llStyleWheel;
+    private DatePicker mDatePicker;
+    private  DatePickerDialog datePickerDialog;
     private ArrayList<String> eyesTypeList, styleList;
     private TextView tvDate, tvEyesType, tvLashStyle;
     private LinearLayout.LayoutParams layoutParams;
@@ -51,6 +57,7 @@ public class NewCustomFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        setDateWheelView(view);
         setEyesWheelView(view);
         setStyleWheelView(view);
         setPhotoView(view);
@@ -64,16 +71,28 @@ public class NewCustomFragment extends Fragment {
     }
 
     private void setDateWheelView(View view) {
-        wvYear = new WheelView(getActivity());
-        wvMonth = new WheelView(getActivity());
-        wvDay = new WheelView(getActivity());
-
         LinearLayout dateLayout = (LinearLayout)view.findViewById(R.id.dateLayout);
-
         dateLayout.setOnClickListener(mClickListener);
 
-        llDateWheel = (LinearLayout)view.findViewById(R.id.dateWheel);
-        tvDate = (TextView)view.findViewById(R.id.dateValue);
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        // month start from 0
+        int month = cal.get(Calendar.MONTH) + 1;
+        int day = cal.get(Calendar.DAY_OF_MONTH);
+
+        tvDate = (TextView) view.findViewById(R.id.dateValue);
+        tvDate.setText(year + "/" + month + "/" + day);
+
+        mDatePicker = (DatePicker)view.findViewById(R.id.datePicker);
+        mDatePicker.setCalendarViewShown(false);
+
+        mDatePicker.init(year, cal.get(Calendar.MONTH), day, new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                tvDate.setText(year+ "/" + (monthOfYear+1) + "/" + dayOfMonth);
+            }
+        });
+
     }
 
     private void setEyesWheelView(View view){
@@ -130,6 +149,16 @@ public class NewCustomFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.dateLayout:
+//                    datePickerDialog.show();
+                    if (dataWheelStatus){
+                        mDatePicker.setVisibility(View.GONE);
+                        tvDate.setVisibility(View.VISIBLE);
+                        dataWheelStatus = false;
+                    } else {
+                        mDatePicker.setVisibility(View.VISIBLE);
+                        tvDate.setVisibility(View.INVISIBLE);
+                        dataWheelStatus = true;
+                    }
                     break;
                 case R.id.eyeLayout:
                     switchWheelStatus(llEyesTypeWheel, wvEyesType, tvEyesType, eyesWheelStatus);
