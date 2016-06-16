@@ -30,14 +30,13 @@ import java.util.Calendar;
  */
 public class NewCustomFragment extends Fragment {
 
-    private WheelView wvYear, wvMonth, wvDay, wvEyesType, wvStyle;
-    private LinearLayout llDateWheel, llEyesTypeWheel, llStyleWheel;
+    private WheelView wvMaterial, wvEyesType, wvStyle, wvCurl, wvLength;
+    private LinearLayout llMaterialWheel, llEyesTypeWheel, llStyleWheel, llCurlWheel, llLengthWheel;
     private DatePicker mDatePicker;
-    private  DatePickerDialog datePickerDialog;
-    private ArrayList<String> eyesTypeList, styleList;
-    private TextView tvDate, tvEyesType, tvLashStyle;
+    private ArrayList<String> eyesTypeList, styleList, materialList, curlList, lengthList;
+    private TextView tvDate, tvEyesType, tvLashStyle, tvMaterial, tvCurl, tvLength;
     private LinearLayout.LayoutParams layoutParams;
-    private boolean dataWheelStatus, eyesWheelStatus, styleWheelStatus = false;
+    private boolean dataWheelStatus, eyesWheelStatus, styleWheelStatus, materialWheelStatus, curlWheelStatus, lengthWheelStatus = false;
 
     public NewCustomFragment() {
         // Required empty public constructor
@@ -59,7 +58,10 @@ public class NewCustomFragment extends Fragment {
         layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         setDateWheelView(view);
         setEyesWheelView(view);
+        setMaterialWheelView(view);
         setStyleWheelView(view);
+        setCurlWheelView(view);
+        setLengthWheelView(view);
         setPhotoView(view);
 
         super.onViewCreated(view, savedInstanceState);
@@ -89,7 +91,7 @@ public class NewCustomFragment extends Fragment {
         mDatePicker.init(year, cal.get(Calendar.MONTH), day, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                tvDate.setText(year+ "/" + (monthOfYear+1) + "/" + dayOfMonth);
+                tvDate.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
             }
         });
 
@@ -120,6 +122,30 @@ public class NewCustomFragment extends Fragment {
 
     }
 
+    private void setMaterialWheelView(View view){
+        LinearLayout materialLayout = (LinearLayout)view.findViewById(R.id.materialLayout);
+        materialLayout.setOnClickListener(mClickListener);
+
+        llMaterialWheel = (LinearLayout)view.findViewById(R.id.materialWheel);
+        tvMaterial = (TextView)view.findViewById(R.id.materialValue);
+        wvMaterial = new WheelView(getActivity());
+
+        materialList = new ArrayList<String>((Arrays.asList(getResources().getStringArray(R.array.lash_material))));
+        wvMaterial.setWVValue(materialList, false, 18, WheelView.CENTER);
+        wvMaterial.setInitPosition(0);
+
+        llMaterialWheel.addView(wvMaterial, layoutParams);
+        llMaterialWheel.setGravity(Gravity.CENTER);
+
+        tvMaterial.setText(wvMaterial.getSelectedItemText());
+        wvMaterial.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(WheelView view, int index) {
+                tvMaterial.setText(view.getSelectedItemText());
+            }
+        });
+    }
+
     private void setStyleWheelView(View view){
         LinearLayout styleLayout = (LinearLayout)view.findViewById(R.id.styleLayout);
         styleLayout.setOnClickListener(mClickListener);
@@ -140,6 +166,54 @@ public class NewCustomFragment extends Fragment {
             @Override
             public void onItemSelected(WheelView view, int index) {
                 tvLashStyle.setText(view.getSelectedItemText());
+            }
+        });
+    }
+
+    private void setCurlWheelView(View view){
+        LinearLayout curlLayout = (LinearLayout)view.findViewById(R.id.curlLayout);
+        curlLayout.setOnClickListener(mClickListener);
+
+        llCurlWheel = (LinearLayout)view.findViewById(R.id.curlWheel);
+        tvCurl = (TextView)view.findViewById(R.id.curlValue);
+        wvCurl = new WheelView(getActivity());
+
+        curlList = new ArrayList<String>((Arrays.asList(getResources().getStringArray(R.array.curl))));
+        wvCurl.setWVValue(curlList, false, 18, WheelView.CENTER);
+        wvCurl.setInitPosition(0);
+
+        llCurlWheel.addView(wvCurl, layoutParams);
+        llCurlWheel.setGravity(Gravity.CENTER);
+
+        tvCurl.setText(wvCurl.getSelectedItemText());
+        wvCurl.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(WheelView view, int index) {
+                tvCurl.setText(view.getSelectedItemText());
+            }
+        });
+    }
+
+    private void setLengthWheelView(View view){
+        LinearLayout lengthLayout = (LinearLayout)view.findViewById(R.id.lengthLayout);
+        lengthLayout.setOnClickListener(mClickListener);
+
+        llLengthWheel = (LinearLayout)view.findViewById(R.id.lengthWheel);
+        tvLength = (TextView)view.findViewById(R.id.lengthValue);
+        wvLength = new WheelView(getActivity());
+
+        lengthList = new ArrayList<String>((Arrays.asList(getResources().getStringArray(R.array.length))));
+        wvLength.setWVValue(lengthList, false, 18, WheelView.CENTER);
+        wvLength.setInitPosition(0);
+
+        llLengthWheel.addView(wvLength, layoutParams);
+        llLengthWheel.setGravity(Gravity.CENTER);
+
+        tvLength.setText(wvLength.getSelectedItemText());
+        wvLength.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(WheelView view, int index) {
+                tvLength.setText(view.getSelectedItemText());
             }
         });
     }
@@ -170,6 +244,15 @@ public class NewCustomFragment extends Fragment {
 
                     break;
 
+                case R.id.materialLayout:
+                    switchWheelStatus(llMaterialWheel, wvMaterial, tvMaterial, materialWheelStatus);
+
+                    if (materialWheelStatus)
+                        materialWheelStatus = false;
+                    else
+                        materialWheelStatus = true;
+                    break;
+
                 case R.id.styleLayout:
                     switchWheelStatus(llStyleWheel, wvStyle, tvLashStyle, styleWheelStatus);
 
@@ -178,6 +261,24 @@ public class NewCustomFragment extends Fragment {
                     else
                         styleWheelStatus = true;
 
+                    break;
+
+                case R.id.curlLayout:
+                    switchWheelStatus(llCurlWheel, wvCurl, tvCurl, curlWheelStatus);
+
+                    if (curlWheelStatus)
+                        curlWheelStatus = false;
+                    else
+                        curlWheelStatus = true;
+                    break;
+
+                case R.id.lengthLayout:
+                    switchWheelStatus(llLengthWheel, wvLength, tvLength, lengthWheelStatus);
+
+                    if (lengthWheelStatus)
+                        lengthWheelStatus = false;
+                    else
+                        lengthWheelStatus = true;
                     break;
 
                 case R.id.photoLayout:

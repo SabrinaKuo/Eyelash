@@ -5,6 +5,10 @@
     <string name="dateTitle">Date</string>
     <string name="eyeTitle">Eyes Type</string>
     <string name="styleTitle">Style</string>
+    <string name="materialTitle">Material</string>
+    <string name="curlTitle">Curl</string>
+    <string name="thickTitle">Thick</string>
+    <string name="lengthTitle">Length</string>
     <string name="photoTitle">Photo</string>
 
     <string-array name="eyes_type">
@@ -16,10 +20,28 @@
         <item>凹眼</item>
     </string-array>
 
+    <string-array name="lash_material">
+        <item>蠶絲纖維睫毛</item>
+        <item>黑鑽天使睫毛</item>
+        <item>天然水貂毛</item>
+        <item>天然兔毛</item>
+    </string-array>
+
     <string-array name="lash_style">
-        <item>蛋白纖維毛</item>
-        <item>水貂毛</item>
-        <item>兔毛</item>
+        <item>優雅型</item>
+        <item>性感型</item>
+        <item>可愛型</item>
+        <item>豔麗型</item>
+    </string-array>
+
+    <string-array name="length">
+        <item>8 mm</item>
+        <item>9 mm</item>
+        <item>10 mm</item>
+        <item>11 mm</item>
+        <item>12 mm</item>
+        <item>13 mm</item>
+        <item>14 mm</item>
     </string-array>
 
     <string-array name="curl">

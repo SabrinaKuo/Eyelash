@@ -32,6 +32,7 @@ public class PhotoFragment extends Fragment {
                              Bundle savedInstanceState) {
         RecyclerView photoRecycler = (RecyclerView)inflater.inflate(R.layout.fragment_photo, container, false);
 
+        // fake data
         ArrayList<PhotoInfo> photoDataList = new ArrayList<>();
         photoDataList.add(new PhotoInfo("test", "testing"));
         photoDataList.add(new PhotoInfo("test2", "coooooooool"));
