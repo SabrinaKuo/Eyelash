@@ -33,6 +33,16 @@
 
     </RelativeLayout>
 
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/custom_item_vertical_margin"
+        android:contextClickable="true"
+        android:iconifiedByDefault="false"
+        android:queryHint="@string/search_hint"
+        android:inputType="phone" />
+
     <android.support.v7.widget.RecyclerView
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"

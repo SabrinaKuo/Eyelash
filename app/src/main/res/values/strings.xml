@@ -14,6 +14,8 @@
     <string name="lengthTitle">Length</string>
     <string name="photoTitle">Photos</string>
 
+    <string name="search_hint">Enter phone number</string>
+
     <string-array name="eyes_type">
         <item>外雙眼皮</item>
         <item>內雙眼皮</item>
