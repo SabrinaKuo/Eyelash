@@ -1,9 +1,46 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/custom_item_horizontal_margin"
+        android:background="@color/colorPrimaryDark">
+
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/header_back"
+            android:layout_alignParentLeft="true" />
+
+        <TextView
+            android:id="@+id/new_custom_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_title"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_centerInParent="true"
+            />
+
+        <TextView
+            android:id="@+id/save_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:textSize="18sp"
+            android:textColor="@android:color/white"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true" />
+
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -11,7 +48,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@android:color/white"
             android:divider="?android:dividerHorizontal"
             android:showDividers="middle"
@@ -25,7 +62,8 @@
             android:background="@android:color/white"
             android:hint="Name"
             android:textColorHint="@color/background"
-            android:textSize="16dp"/>
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"/>
 
         <EditText
             android:id="@+id/phone"
@@ -34,8 +72,10 @@
             android:paddingLeft="20dp"
             android:background="@android:color/white"
             android:hint="Cell phone"
+            android:inputType="phone"
             android:textColorHint="@color/background"
-            android:textSize="16dp"/>
+            android:textColor="@android:color/darker_gray"
+            android:textSize="16sp"/>
 
             <LinearLayout
                 android:id="@+id/dateLayout"

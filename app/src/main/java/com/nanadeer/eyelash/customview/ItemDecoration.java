@@ -19,16 +19,17 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable mDivider;
     private int orientation;
 
-    public ItemDecoration(Context context, int orientation) {
+    public ItemDecoration(Context context) {
+
         TypedArray typedArray = context.obtainStyledAttributes(attrs);
+        orientation = OrientationHelper.HORIZONTAL;
         mDivider = typedArray.getDrawable(0);
         typedArray.recycle();
-        this.orientation = orientation;
     }
 
     @Override
     public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
-        drawHDeraction(c, parent);
+        drawHDirection(c, parent);
         super.onDraw(c, parent, state);
     }
 
@@ -47,7 +48,7 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
      * @param c
      * @param parent
      */
-    private void drawHDeraction(Canvas c, RecyclerView parent) {
+    private void drawHDirection(Canvas c, RecyclerView parent) {
         int left = parent.getPaddingLeft();
         int right = parent.getWidth() - parent.getPaddingRight();
         int childCount = parent.getChildCount();
@@ -67,7 +68,7 @@ public class ItemDecoration extends RecyclerView.ItemDecoration {
      * @param c
      * @param parent
      */
-    private void drawVDeraction(Canvas c, RecyclerView parent) {
+    private void drawVDirection(Canvas c, RecyclerView parent) {
         int top = parent.getPaddingTop();
         int bottom = parent.getHeight() - parent.getPaddingBottom();
         int childCount = parent.getChildCount();

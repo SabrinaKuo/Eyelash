@@ -1,29 +1,31 @@
 package com.nanadeer.eyelash.fragment;
 
 
-import android.app.ActionBar;
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nanadeer.eyelash.R;
 import com.nanadeer.eyelash.customview.wheelview.OnItemSelectedListener;
 import com.nanadeer.eyelash.customview.wheelview.WheelView;
-import com.nanadeer.eyelash.parameter.EyelashParameter;
+import com.nanadeer.eyelash.database.CustomInfo;
+import com.nanadeer.eyelash.database.CustomerTable;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,10 +35,19 @@ public class NewCustomFragment extends Fragment {
     private WheelView wvMaterial, wvEyesType, wvStyle, wvCurl, wvLength;
     private LinearLayout llMaterialWheel, llEyesTypeWheel, llStyleWheel, llCurlWheel, llLengthWheel;
     private DatePicker mDatePicker;
-    private ArrayList<String> eyesTypeList, styleList, materialList, curlList, lengthList;
     private TextView tvDate, tvEyesType, tvLashStyle, tvMaterial, tvCurl, tvLength;
     private LinearLayout.LayoutParams layoutParams;
     private boolean dataWheelStatus, eyesWheelStatus, styleWheelStatus, materialWheelStatus, curlWheelStatus, lengthWheelStatus = false;
+
+    private EditText mNameEditText;
+    private EditText mPhoneEditText;
+
+    private CustomInfo mCustomInfo;
+
+    private boolean mIsNewRecord = true;
+    private String mCustomName;
+    private String mCustomPhone;
+    private long mOrderId;
 
     public NewCustomFragment() {
         // Required empty public constructor
@@ -45,6 +56,20 @@ public class NewCustomFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Bundle bundle = getArguments();
+        if (bundle != null){
+            mIsNewRecord = bundle.getBoolean("IS_NEW_RECORD");
+            mOrderId = bundle.getLong("ORDER_ID");
+            mCustomName = bundle.getString("NAME");
+            mCustomPhone = bundle.getString("PHONE");
+        }
+
+        if (mIsNewRecord) {
+            mCustomInfo = new CustomInfo();
+        } else {
+            mCustomInfo = CustomerTable.getCustomRecordById(mOrderId);
+        }
+
     }
 
     @Override
@@ -55,6 +80,23 @@ public class NewCustomFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+
+        mNameEditText = (EditText) view.findViewById(R.id.name);
+        mPhoneEditText = (EditText) view.findViewById(R.id.phone);
+        TextView saveTextView = (TextView) view.findViewById(R.id.save_textview);
+        ImageButton backBtn = (ImageButton) view.findViewById(R.id.back_btn);
+
+        saveTextView.setOnClickListener(mBarClickListener);
+        backBtn.setOnClickListener(mBarClickListener);
+
+        if (!mIsNewRecord) {
+            mNameEditText.setText(mCustomInfo.getName());
+            mPhoneEditText.setText(mCustomInfo.getPhone());
+        } else {
+            mNameEditText.setText(mCustomName);
+            mPhoneEditText.setText(mCustomPhone);
+        }
+
         layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         setDateWheelView(view);
         setEyesWheelView(view);
@@ -76,26 +118,37 @@ public class NewCustomFragment extends Fragment {
         LinearLayout dateLayout = (LinearLayout)view.findViewById(R.id.dateLayout);
         dateLayout.setOnClickListener(mClickListener);
 
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        // month start from 0
-        int month = cal.get(Calendar.MONTH) + 1;
-        int day = cal.get(Calendar.DAY_OF_MONTH);
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+        final Calendar cal = Calendar.getInstance();
+
+        if (!mIsNewRecord) {
+            try {
+                cal.setTime(sdf.parse(mCustomInfo.getDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String date = sdf.format(cal.getTime());
 
         tvDate = (TextView) view.findViewById(R.id.dateValue);
-        tvDate.setText(year + "/" + month + "/" + day);
+        tvDate.setText(date);
 
         mDatePicker = (DatePicker)view.findViewById(R.id.datePicker);
         mDatePicker.setCalendarViewShown(false);
 
-        mDatePicker.init(year, cal.get(Calendar.MONTH), day, new DatePicker.OnDateChangedListener() {
+        mDatePicker.init(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DAY_OF_MONTH), new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                tvDate.setText(year + "/" + (monthOfYear + 1) + "/" + dayOfMonth);
+                cal.set(Calendar.YEAR, year);
+                cal.set(Calendar.MONTH, monthOfYear);
+                cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                tvDate.setText(sdf.format(cal.getTime()));
             }
         });
 
     }
+
 
     private void setEyesWheelView(View view){
         LinearLayout eyesLayout = (LinearLayout)view.findViewById(R.id.eyeLayout);
@@ -105,7 +158,7 @@ public class NewCustomFragment extends Fragment {
         tvEyesType = (TextView)view.findViewById(R.id.eyeValue);
         wvEyesType = new WheelView(getActivity());
 
-        eyesTypeList = new ArrayList<String>((Arrays.asList(getResources().getStringArray(R.array.eyes_type))));
+        ArrayList<String> eyesTypeList = new ArrayList<>((Arrays.asList(getResources().getStringArray(R.array.eyes_type))));
         wvEyesType.setWVValue(eyesTypeList, false, 18, WheelView.CENTER);
         wvEyesType.setInitPosition(0);
 
@@ -116,9 +169,15 @@ public class NewCustomFragment extends Fragment {
         wvEyesType.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(WheelView view, int index) {
-                tvEyesType.setText(view.getSelectedItemText());
+                String eyesType = view.getSelectedItemText();
+                tvEyesType.setText(eyesType);
             }
         });
+
+        if (!mIsNewRecord){
+            wvEyesType.setInitPosition(eyesTypeList.indexOf(mCustomInfo.getEyesType()));
+            tvEyesType.setText(mCustomInfo.getEyesType());
+        }
 
     }
 
@@ -130,7 +189,7 @@ public class NewCustomFragment extends Fragment {
         tvMaterial = (TextView)view.findViewById(R.id.materialValue);
         wvMaterial = new WheelView(getActivity());
 
-        materialList = new ArrayList<String>((Arrays.asList(getResources().getStringArray(R.array.lash_material))));
+        ArrayList<String> materialList = new ArrayList<>((Arrays.asList(getResources().getStringArray(R.array.lash_material))));
         wvMaterial.setWVValue(materialList, false, 18, WheelView.CENTER);
         wvMaterial.setInitPosition(0);
 
@@ -141,9 +200,16 @@ public class NewCustomFragment extends Fragment {
         wvMaterial.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(WheelView view, int index) {
-                tvMaterial.setText(view.getSelectedItemText());
+                String material = view.getSelectedItemText();
+                tvMaterial.setText(material);
             }
         });
+
+        if (!mIsNewRecord) {
+            wvMaterial.setInitPosition(materialList.indexOf(mCustomInfo.getMaterial()));
+            tvMaterial.setText(mCustomInfo.getMaterial());
+        }
+
     }
 
     private void setStyleWheelView(View view){
@@ -154,7 +220,7 @@ public class NewCustomFragment extends Fragment {
         tvLashStyle = (TextView)view.findViewById(R.id.styleValue);
         wvStyle = new WheelView(getActivity());
 
-        styleList = new ArrayList<String>((Arrays.asList(getResources().getStringArray(R.array.lash_style))));
+        ArrayList<String> styleList = new ArrayList<>((Arrays.asList(getResources().getStringArray(R.array.lash_style))));
         wvStyle.setWVValue(styleList, false, 18, WheelView.CENTER);
         wvStyle.setInitPosition(0);
 
@@ -165,9 +231,16 @@ public class NewCustomFragment extends Fragment {
         wvStyle.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(WheelView view, int index) {
-                tvLashStyle.setText(view.getSelectedItemText());
+                String style = view.getSelectedItemText();
+                tvLashStyle.setText(style);
             }
         });
+
+        if (!mIsNewRecord) {
+            wvStyle.setInitPosition(styleList.indexOf(mCustomInfo.getStyle()));
+            tvLashStyle.setText(mCustomInfo.getStyle());
+        }
+
     }
 
     private void setCurlWheelView(View view){
@@ -178,7 +251,7 @@ public class NewCustomFragment extends Fragment {
         tvCurl = (TextView)view.findViewById(R.id.curlValue);
         wvCurl = new WheelView(getActivity());
 
-        curlList = new ArrayList<String>((Arrays.asList(getResources().getStringArray(R.array.curl))));
+        ArrayList<String> curlList = new ArrayList<>((Arrays.asList(getResources().getStringArray(R.array.curl))));
         wvCurl.setWVValue(curlList, false, 18, WheelView.CENTER);
         wvCurl.setInitPosition(0);
 
@@ -189,9 +262,16 @@ public class NewCustomFragment extends Fragment {
         wvCurl.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(WheelView view, int index) {
-                tvCurl.setText(view.getSelectedItemText());
+                String curl = view.getSelectedItemText();
+                tvCurl.setText(curl);
             }
         });
+
+        if (!mIsNewRecord) {
+            wvCurl.setInitPosition(curlList.indexOf(mCustomInfo.getCurl()));
+            tvCurl.setText(mCustomInfo.getCurl());
+        }
+
     }
 
     private void setLengthWheelView(View view){
@@ -202,7 +282,7 @@ public class NewCustomFragment extends Fragment {
         tvLength = (TextView)view.findViewById(R.id.lengthValue);
         wvLength = new WheelView(getActivity());
 
-        lengthList = new ArrayList<String>((Arrays.asList(getResources().getStringArray(R.array.length))));
+        ArrayList<String> lengthList = new ArrayList<>((Arrays.asList(getResources().getStringArray(R.array.length))));
         wvLength.setWVValue(lengthList, false, 18, WheelView.CENTER);
         wvLength.setInitPosition(0);
 
@@ -213,17 +293,23 @@ public class NewCustomFragment extends Fragment {
         wvLength.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(WheelView view, int index) {
-                tvLength.setText(view.getSelectedItemText());
+                String length = view.getSelectedItemText();
+                tvLength.setText(length);
             }
         });
+
+        if (!mIsNewRecord) {
+            wvLength.setInitPosition(lengthList.indexOf(mCustomInfo.getLength()));
+            tvLength.setText(mCustomInfo.getLength());
+        }
+
     }
 
-    public View.OnClickListener mClickListener = new View.OnClickListener() {
+    private View.OnClickListener mClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
             switch (v.getId()){
                 case R.id.dateLayout:
-//                    datePickerDialog.show();
                     if (dataWheelStatus){
                         mDatePicker.setVisibility(View.GONE);
                         tvDate.setVisibility(View.VISIBLE);
@@ -236,55 +322,38 @@ public class NewCustomFragment extends Fragment {
                     break;
                 case R.id.eyeLayout:
                     switchWheelStatus(llEyesTypeWheel, wvEyesType, tvEyesType, eyesWheelStatus);
-
-                    if (eyesWheelStatus)
-                        eyesWheelStatus = false;
-                    else
-                        eyesWheelStatus = true;
+                    eyesWheelStatus = (!eyesWheelStatus);
 
                     break;
 
                 case R.id.materialLayout:
                     switchWheelStatus(llMaterialWheel, wvMaterial, tvMaterial, materialWheelStatus);
+                    materialWheelStatus = (!materialWheelStatus);
 
-                    if (materialWheelStatus)
-                        materialWheelStatus = false;
-                    else
-                        materialWheelStatus = true;
                     break;
 
                 case R.id.styleLayout:
                     switchWheelStatus(llStyleWheel, wvStyle, tvLashStyle, styleWheelStatus);
-
-                    if (styleWheelStatus)
-                        styleWheelStatus = false;
-                    else
-                        styleWheelStatus = true;
+                    styleWheelStatus = (!styleWheelStatus);
 
                     break;
 
                 case R.id.curlLayout:
                     switchWheelStatus(llCurlWheel, wvCurl, tvCurl, curlWheelStatus);
+                    curlWheelStatus = (!curlWheelStatus);
 
-                    if (curlWheelStatus)
-                        curlWheelStatus = false;
-                    else
-                        curlWheelStatus = true;
                     break;
 
                 case R.id.lengthLayout:
                     switchWheelStatus(llLengthWheel, wvLength, tvLength, lengthWheelStatus);
+                    lengthWheelStatus = (!lengthWheelStatus);
 
-                    if (lengthWheelStatus)
-                        lengthWheelStatus = false;
-                    else
-                        lengthWheelStatus = true;
                     break;
 
                 case R.id.photoLayout:
                     PhotoFragment photoFragment = new PhotoFragment();
                     FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                    fragmentTransaction.addToBackStack(EyelashParameter.FRAGMENT_PHOTOS);
+                    fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.replace(R.id.mainActivityContent, photoFragment);
                     fragmentTransaction.commit();
                     break;
@@ -294,7 +363,47 @@ public class NewCustomFragment extends Fragment {
         }
     };
 
-    public void switchWheelStatus(View view, WheelView wheelView, TextView tvView, boolean status){
+    private View.OnClickListener mBarClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()){
+                case R.id.back_btn:
+                    backToMainFragment();
+                    break;
+                case R.id.save_textview:
+                    saveDataToDB();
+                    backToMainFragment();
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
+
+    private void saveDataToDB(){
+        mCustomInfo.setName(mNameEditText.getText().toString());
+        mCustomInfo.setPhone(mPhoneEditText.getText().toString());
+        mCustomInfo.setMaterial(tvMaterial.getText().toString());
+        mCustomInfo.setDate(tvDate.getText().toString());
+        mCustomInfo.setEyesType(tvEyesType.getText().toString());
+        mCustomInfo.setCurl(tvCurl.getText().toString());
+        mCustomInfo.setLength(tvLength.getText().toString());
+        mCustomInfo.setStyle(tvLashStyle.getText().toString());
+
+        System.out.println(mCustomInfo.getStyle());
+
+        if (mIsNewRecord)
+            CustomerTable.addNewRecord(mCustomInfo);
+        else
+            CustomerTable.editRecord(mCustomInfo);
+
+    }
+
+    private void backToMainFragment(){
+        getActivity().getSupportFragmentManager().popBackStack();
+    }
+
+    private void switchWheelStatus(View view, WheelView wheelView, TextView tvView, boolean status){
         if (status){
             view.setVisibility(View.GONE);
             tvView.setVisibility(View.VISIBLE);

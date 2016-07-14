@@ -2,20 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/custom_item_vertical_margin"
-    android:paddingLeft="@dimen/custom_item_horizontal_margin"
-    android:paddingRight="@dimen/custom_item_horizontal_margin"
-    android:paddingTop="@dimen/custom_item_vertical_margin"
-    android:orientation="vertical">
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/custom_name"
-        android:textSize="16sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <TextView
-        android:id="@+id/custom_phone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/custom_name"
+            android:textSize="16sp"
+            android:paddingLeft="@dimen/custom_item_horizontal_margin"
+            android:paddingTop="@dimen/custom_item_vertical_margin"
+            android:layout_alignParentLeft="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/custom_phone"
+            android:paddingBottom="@dimen/custom_item_vertical_margin"
+            android:paddingLeft="@dimen/custom_item_horizontal_margin"
+            android:layout_below="@+id/custom_name"
+            android:layout_alignParentLeft="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
 
 </LinearLayout>

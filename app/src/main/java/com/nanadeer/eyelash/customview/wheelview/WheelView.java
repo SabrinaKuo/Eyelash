@@ -149,15 +149,15 @@ public class WheelView extends View {
 
         if (align == LEFT) {
             setAlign(LEFT);
-            setViewPadding(100, 0, 0, 0);
+            setViewPadding(100, 0);
         }
         if (align == CENTER) {
             setAlign(CENTER);
-            setViewPadding(30, 0, 30, 0);
+            setViewPadding(30, 30);
         }
         if (align == RIGHT) {
             setAlign(RIGHT);
-            setViewPadding(0, 0, 100, 0);
+            setViewPadding(0, 100);
         }
     }
 
@@ -279,7 +279,7 @@ public class WheelView extends View {
     }
 
     // 设置左右内边距
-    public void setViewPadding(int left, int top, int right, int bottom) {
+    public void setViewPadding(int left, int right) {
         paddingLeft = left;
         paddingRight = right;
     }

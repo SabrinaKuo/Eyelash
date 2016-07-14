@@ -3,7 +3,7 @@ package com.nanadeer.eyelash.database;
 import android.content.Context;
 
 /**
- * Created by sabrinakuo on 2016/6/6.
+ * Created by Sabrina Kuo on 2016/6/6.
  */
 public class PhotoInfo {
     private String describe;
