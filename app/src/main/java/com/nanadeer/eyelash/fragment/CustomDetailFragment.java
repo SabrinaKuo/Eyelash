@@ -28,6 +28,7 @@ public class CustomDetailFragment extends Fragment {
     private ArrayList<CustomInfo> mList;
     private String mCustomName;
     private String mCustomPhone;
+    public static RecyclerView recyclerView;
 
     public CustomDetailFragment() {
         mList = new ArrayList<>();
@@ -73,7 +74,7 @@ public class CustomDetailFragment extends Fragment {
             }
         });
 
-        RecyclerView recyclerView = (RecyclerView)view.findViewById(R.id.custom_detail_rv);
+        recyclerView = (RecyclerView)view.findViewById(R.id.custom_detail_rv);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(null);
         recyclerView.addItemDecoration(new ItemDecoration(getActivity()));

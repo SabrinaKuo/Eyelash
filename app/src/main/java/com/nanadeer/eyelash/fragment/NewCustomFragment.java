@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.nanadeer.eyelash.R;
+import com.nanadeer.eyelash.adapter.CustomDetailListAdapter;
 import com.nanadeer.eyelash.customview.wheelview.OnItemSelectedListener;
 import com.nanadeer.eyelash.customview.wheelview.WheelView;
 import com.nanadeer.eyelash.database.CustomInfo;
@@ -372,6 +373,8 @@ public class NewCustomFragment extends Fragment {
                     break;
                 case R.id.save_textview:
                     saveDataToDB();
+                    CustomDetailListAdapter adapter = (CustomDetailListAdapter) CustomDetailFragment.recyclerView.getAdapter();
+                    adapter.addItem(0, mCustomInfo);
                     backToMainFragment();
                     break;
                 default:

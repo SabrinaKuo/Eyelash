@@ -61,7 +61,7 @@ public class CustomerTable {
     public static ArrayList<CustomInfo> getDetectCustom(String phoneNumber){
         SQLiteDatabase db = openDatabase();
 
-        Cursor cursor = db.query(CUSTOMER_TABLE, null, PHONE + " = ?", new String[]{phoneNumber}, null, null, null);
+        Cursor cursor = db.query(CUSTOMER_TABLE, null, PHONE + " = ?", new String[]{phoneNumber}, null, null, DATE + " DESC");
 
         ArrayList<CustomInfo> customInfos = new ArrayList<>();
         while (cursor.moveToNext()){

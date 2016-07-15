@@ -100,6 +100,12 @@ public class CustomDetailListAdapter extends RecyclerView.Adapter<CustomDetailLi
         transaction.commit();
     }
 
+    public void addItem(int position, CustomInfo data) {
+        mDataInfo.add(position, data);
+        notifyItemInserted(position);
+        notifyItemRangeChanged(position, mDataInfo.size());
+    }
+
     private void removeItem(int position){
 
         CustomerTable.deleteRecord(mDataInfo.get(position));
