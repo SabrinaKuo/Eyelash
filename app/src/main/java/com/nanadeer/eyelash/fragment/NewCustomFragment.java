@@ -33,12 +33,12 @@ import java.util.Locale;
  */
 public class NewCustomFragment extends Fragment {
 
-    private WheelView wvMaterial, wvEyesType, wvStyle, wvCurl, wvLength;
-    private LinearLayout llMaterialWheel, llEyesTypeWheel, llStyleWheel, llCurlWheel, llLengthWheel;
+    private WheelView wvMaterial, wvEyesType, wvStyle, wvCurl, wvLength, wvThick;
+    private LinearLayout llMaterialWheel, llEyesTypeWheel, llStyleWheel, llCurlWheel, llLengthWheel, llThickWheel;
     private DatePicker mDatePicker;
-    private TextView tvDate, tvEyesType, tvLashStyle, tvMaterial, tvCurl, tvLength;
+    private TextView tvDate, tvEyesType, tvLashStyle, tvMaterial, tvCurl, tvLength, tvThick;
     private LinearLayout.LayoutParams layoutParams;
-    private boolean dataWheelStatus, eyesWheelStatus, styleWheelStatus, materialWheelStatus, curlWheelStatus, lengthWheelStatus = false;
+    private boolean dataWheelStatus, eyesWheelStatus, styleWheelStatus, materialWheelStatus, curlWheelStatus, lengthWheelStatus, thickWheelStatus = false;
 
     private EditText mNameEditText;
     private EditText mPhoneEditText;
@@ -103,6 +103,7 @@ public class NewCustomFragment extends Fragment {
         setEyesWheelView(view);
         setMaterialWheelView(view);
         setStyleWheelView(view);
+        setThickWheelView(view);
         setCurlWheelView(view);
         setLengthWheelView(view);
         setPhotoView(view);
@@ -244,6 +245,36 @@ public class NewCustomFragment extends Fragment {
 
     }
 
+    private void setThickWheelView(View view){
+        LinearLayout thickLayout = (LinearLayout)view.findViewById(R.id.thickLayout);
+        thickLayout.setOnClickListener(mClickListener);
+
+        llThickWheel = (LinearLayout)view.findViewById(R.id.thickWheel);
+        tvThick = (TextView)view.findViewById(R.id.thickValue);
+        wvThick = new WheelView(getActivity());
+
+        ArrayList<String> thickList = new ArrayList<>((Arrays.asList(getResources().getStringArray(R.array.thick))));
+        wvThick.setWVValue(thickList, false, 18, WheelView.CENTER);
+        wvThick.setInitPosition(0);
+
+        llThickWheel.addView(wvThick, layoutParams);
+        llThickWheel.setGravity(Gravity.CENTER);
+
+        tvThick.setText(wvThick.getSelectedItemText());
+        wvThick.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(WheelView view, int index) {
+                String thick = view.getSelectedItemText();
+                tvThick.setText(thick);
+            }
+        });
+
+        if (!mIsNewRecord) {
+            wvThick.setInitPosition(thickList.indexOf(mCustomInfo.getThick()));
+            tvThick.setText(mCustomInfo.getThick());
+        }
+    }
+
     private void setCurlWheelView(View view){
         LinearLayout curlLayout = (LinearLayout)view.findViewById(R.id.curlLayout);
         curlLayout.setOnClickListener(mClickListener);
@@ -339,6 +370,12 @@ public class NewCustomFragment extends Fragment {
 
                     break;
 
+                case R.id.thickLayout:
+                    switchWheelStatus(llThickWheel, wvThick, tvThick, thickWheelStatus);
+                    thickWheelStatus = (!thickWheelStatus);
+
+                    break;
+
                 case R.id.curlLayout:
                     switchWheelStatus(llCurlWheel, wvCurl, tvCurl, curlWheelStatus);
                     curlWheelStatus = (!curlWheelStatus);
@@ -373,8 +410,12 @@ public class NewCustomFragment extends Fragment {
                     break;
                 case R.id.save_textview:
                     saveDataToDB();
-                    CustomDetailListAdapter adapter = (CustomDetailListAdapter) CustomDetailFragment.recyclerView.getAdapter();
-                    adapter.addItem(0, mCustomInfo);
+
+                    if (CustomDetailFragment.recyclerView != null){
+                        CustomDetailListAdapter adapter = (CustomDetailListAdapter) CustomDetailFragment.recyclerView.getAdapter();
+                        adapter.addItem(adapter.getItemCount(), mCustomInfo);
+                    }
+
                     backToMainFragment();
                     break;
                 default:
@@ -389,6 +430,7 @@ public class NewCustomFragment extends Fragment {
         mCustomInfo.setMaterial(tvMaterial.getText().toString());
         mCustomInfo.setDate(tvDate.getText().toString());
         mCustomInfo.setEyesType(tvEyesType.getText().toString());
+        mCustomInfo.setThick(tvThick.getText().toString());
         mCustomInfo.setCurl(tvCurl.getText().toString());
         mCustomInfo.setLength(tvLength.getText().toString());
         mCustomInfo.setStyle(tvLashStyle.getText().toString());

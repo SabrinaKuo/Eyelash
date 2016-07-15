@@ -19,6 +19,7 @@ public class CustomerTable {
     private static final String EYES_TYPE = "eyes_type";
     private static final String STYLE = "style";
     private static final String MATERIAL = "material";
+    private static final String THICK = "thick";
     private static final String CURL = "curl";
     private static final String LENGTH = "length";
     private static final String PHOTOS= "photos";
@@ -31,6 +32,7 @@ public class CustomerTable {
             + EYES_TYPE + " TEXT, "
             + STYLE + " TEXT, "
             + MATERIAL + " TEXT, "
+            + THICK + " TEXT, "
             + CURL + " TEXT, "
             + LENGTH + " TEXT, "
             + PHOTOS + " TEXT)";
@@ -85,6 +87,7 @@ public class CustomerTable {
         cv.put(EYES_TYPE, customInfo.getEyesType());
         cv.put(STYLE, customInfo.getStyle());
         cv.put(MATERIAL, customInfo.getMaterial());
+        cv.put(THICK, customInfo.getThick());
         cv.put(CURL, customInfo.getCurl());
         cv.put(LENGTH, customInfo.getLength());
 //        cv.put(PHOTOS, customInfo.getPhotos());
@@ -105,6 +108,7 @@ public class CustomerTable {
         cv.put(EYES_TYPE, customInfo.getEyesType());
         cv.put(STYLE, customInfo.getStyle());
         cv.put(MATERIAL, customInfo.getMaterial());
+        cv.put(THICK, customInfo.getThick());
         cv.put(CURL, customInfo.getCurl());
         cv.put(LENGTH, customInfo.getLength());
 //        cv.put(PHOTOS, customInfo.getPhotos());
@@ -143,6 +147,7 @@ public class CustomerTable {
         info.setName(cursor.getString(cursor.getColumnIndex(NAME)));
         info.setPhone(cursor.getString(cursor.getColumnIndex(PHONE)));
         info.setLength(cursor.getString(cursor.getColumnIndex(LENGTH)));
+        info.setThick(cursor.getString(cursor.getColumnIndex(THICK)));
         info.setCurl(cursor.getString(cursor.getColumnIndex(CURL)));
         info.setEyesType(cursor.getString(cursor.getColumnIndex(EYES_TYPE)));
         info.setStyle(cursor.getString(cursor.getColumnIndex(STYLE)));

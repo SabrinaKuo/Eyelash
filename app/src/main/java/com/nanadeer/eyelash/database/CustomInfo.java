@@ -13,6 +13,7 @@ public class CustomInfo {
     private String eyesType;
     private String style;
     private String material;
+    private String thick;
     private String curl;
     private String length;
     private ArrayList<Integer> photos = new ArrayList<>();
@@ -24,13 +25,14 @@ public class CustomInfo {
         this.phone = phone;
     }
 
-    public CustomInfo(String name, String phone, String date, String eyesType, String style, String material, String curl, String length, ArrayList<Integer> photos) {
+    public CustomInfo(String name, String phone, String date, String eyesType, String style, String material, String thick, String curl, String length, ArrayList<Integer> photos) {
         this.name = name;
         this.phone = phone;
         this.date = date;
         this.eyesType = eyesType;
         this.style = style;
         this.material = material;
+        this.thick = thick;
         this.curl = curl;
         this.length = length;
         this.photos = photos;
@@ -82,6 +84,14 @@ public class CustomInfo {
 
     public void setStyle(String style) {
         this.style = style;
+    }
+
+    public String getThick() {
+        return thick;
+    }
+
+    public void setThick(String thick) {
+        this.thick = thick;
     }
 
     public String getCurl() {
